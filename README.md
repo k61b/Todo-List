@@ -1,2 +1,2 @@
 ToDo-List
-https://devkayra.github.io/ToDo-List/
+https://kayraberktuncer.github.io/ToDo-List/
