@@ -24,7 +24,7 @@ const initApp = () => {
         const list = toDoList.getList();
         if (list.length) {
             const confirmed = confirm("Are you sure you want to clear the entrie list?");
-            if(confirmed) {
+            if (confirmed) {
                 toDoList.clearList();
                 updatePersistentData(toDoList.getList());
                 refreshThePage();
@@ -95,15 +95,21 @@ const addClickListenerToCheckbox = (checkbox) => {
     checkbox.addEventListener("click", (event) => {
         toDoList.removeItemFromList(checkbox.id);
         updatePersistentData(toDoList.getList());
+        const removedText = getLabelText(checkbox.id);
+        updateScreenReaderConfirmation(removedText, "removed from list");
         setTimeout(() => {
             refreshThePage();
         }, 1000);
     });
 }
 
+const getLabelText = (checkboxId) => {
+    return document.getElementById(checkboxId).nextElementSibling.textContent;
+}
+
 const updatePersistentData = (listArray) => {
     localStorage.setItem("myTodoList", JSON.stringify(listArray));
-} 
+}
 
 const clearItemEntryField = () => {
     document.getElementById("newItem").value = "";
@@ -115,11 +121,12 @@ const setFocusOnItemEntry = () => {
 
 const processSubmission = () => {
     const newEntryText = getNewEntry();
-    if(!newEntryText.length) return;
+    if (!newEntryText.length) return;
     const nextItemId = calcNextItemId();
     const toDoItem = createNewItem(nextItemId, newEntryText);
     toDoList.addItemToList(toDoItem);
     updatePersistentData(toDoList.getList());
+    updateScreenReaderConfirmation(newEntryText, "added");
     refreshThePage();
 }
 
@@ -131,7 +138,7 @@ const calcNextItemId = () => {
     let nextItemId = 1;
     const list = toDoList.getList();
     if (list.length > 0) {
-        nextItemId = list[list.length -1].getId() + 1;
+        nextItemId = list[list.length - 1].getId() + 1;
     }
     return nextItemId;
 }
@@ -141,4 +148,8 @@ const createNewItem = (itemId, itemText) => {
     toDo.setId(itemId);
     toDo.setItem(itemText);
     return toDo;
+}
+
+const updateScreenReaderConfirmation = (newEntryText, actionVerb) => {
+    document.getElementById("confirmation").textContent = `${newEntryText} ${actionVerb}.`;
 }
