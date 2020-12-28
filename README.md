@@ -1,6 +1,6 @@
 # Todo List App
 
-![mockup](./mockup.png)
+![mockup](./mockup.PNG)
 
 ### The aim of this project was to learn the mern stack and make my own todo list.
 
